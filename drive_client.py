@@ -107,6 +107,11 @@ def read_file_in_chunk(token, client_id, client_secret, file_id, offset, length)
         service = build('drive', 'v3', credentials=creds)
         request = service.files().get_media(fileId=file_id)
         request.headers["Range"] = "bytes={}-{}".format(offset, offset + length)
+        if offset < 64 * 1024:
+            # request.headers["Range"] = "bytes={}-{}".format(0, 64 * 1024 * 1024)
+            request.headers["Range"] = ""
+            fh = io.BytesIO(request.execute())
+            return FERNET_OBJ.decrypt(fh.getvalue())[:length - offset]
         fh = io.BytesIO(request.execute())
 
     except Exception as error:
@@ -130,6 +135,4 @@ if __name__ == '__main__':
     # print(map_file_id)
     # print(read_file_in_chunk(token=token, client_id=client_id, client_secret=client_secret,
     #                          file_id='1iAmwI3sOHGWlZfdhQYqZ3_OOBdtzgPvq', offset=5, length=5))
-    dirents = ['.', '..']
-    dirents.extend([k for k, v in list_dir_manipulated(token, client_id, client_secret, "1T2erq7cVOOo3ZpZN6BeE0WBsrXlsVrwN").items()])
-    print(dirents)
+    print(read_file_in_chunk(token, client_id, client_secret, '1wERwDGU_cTlGUS6waw9HwbGG6xJDxRq-', 0, 16384))

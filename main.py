@@ -8,7 +8,7 @@ import errno
 
 from fuse import FUSE, FuseOSError, Operations, fuse_get_context
 
-from drive_client import list_dir_manipulated
+from drive_client import list_dir_manipulated, read_file_in_chunk
 
 token = '{"access_token": "ya29.a0Aa4xrXMNAdNSTGuBeRV-OblCZHE8HNAEmmtlQ2beBGbbRFhm8PizfGFGnx-0PYQlrdmaVxlUQVDlKN0ANkvtfAUG3TMaEv31xyVMorOkuOQgftcYyRyIiHCdyDhI-3rKjvRUZGi6774WLZ2iidD8pUa2JPhRaCgYKATASARASFQEjDvL9mQNjn4Ut7avEd5MIdvyBfA0163", "token_type": "Bearer", "refresh_token": "1//04OjNYdknXPrTCgYIARAAGAQSNwF-L9IrGOKvOgbfTkeKMxWeY90BoxLJLxpJuW1CUWKmAJsqXQTuxZUCgXXy8mQbICiwQmvBwFI", "expiry": "2022-10-10T16:26:24.445819Z"}'
 client_id = '561906364179-jrl0tnvchd73c9tsvppfnjllursdff1t.apps.googleusercontent.com'
@@ -159,7 +159,7 @@ class Passthrough(Operations):
     # plot-k32-2022-11-24-18-08-01588da0c4d62d03dab8f700daddbb7aed3e6868f0a567d02772c8856f26618a.plot
     def read(self, path, length, offset, fh):
         print(length, offset)
-        bytes_read = my_test(path, offset, length)
+        bytes_read = read_file_in_chunk(token, client_id, client_secret, '1wERwDGU_cTlGUS6waw9HwbGG6xJDxRq-', 0, length)
         return bytes_read
 
     @log
