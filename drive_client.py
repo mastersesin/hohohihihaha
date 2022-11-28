@@ -26,6 +26,8 @@ def upload(file_in_mem, token, file_name, client_id, client_secret, drive_id_or_
     response = None
     while response is None:
         status, response = request.next_chunk()
+    del file_in_mem
+    del media
     return True
 
 # if __name__ == '__main__':

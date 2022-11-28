@@ -31,6 +31,7 @@ def read_in_chunks(file_obj):
         if not data:
             break
         yield data, current_start_byte, end_byte
+        del data
 
 
 def main(plot_file_abs_path):
@@ -51,6 +52,7 @@ def main(plot_file_abs_path):
             'file_name': file_name
         })
         worker.start()
+        del chunk
         list_thread.append(worker)
         while len(list_thread) >= MAX_THREAD:
             list_thread = [running_process for running_process in list_thread if running_process.is_alive()]
