@@ -159,7 +159,7 @@ class Passthrough(Operations):
     # plot-k32-2022-11-24-18-08-01588da0c4d62d03dab8f700daddbb7aed3e6868f0a567d02772c8856f26618a.plot
     def read(self, filename, length, offset, fh):
         print(length, offset)
-        bytes_read = read_file_in_chunk(token, client_id, client_secret, filename, offset, length)
+        bytes_read = read_file_in_chunk(token, client_id, client_secret, filename.replace('/', ''), offset, length)
         return bytes_read
 
     @log
