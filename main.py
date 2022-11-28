@@ -72,8 +72,10 @@ class Passthrough(Operations):
                                                      'st_uid'))
         # {'st_atime': 1669403579.5569782, 'st_ctime': 1669403567.356995, 'st_gid': 1002, 'st_mode': 16893,
         #            'st_mtime': 1669403567.356995, 'st_nlink': 2, 'st_size': 4096, 'st_uid': 1001}
-        return {'st_atime': 1669403579.5569782, 'st_ctime': 1669403567.356995, 'st_gid': 1002, 'st_mode': 33188,
-                'st_mtime': 1669403567.356995, 'st_nlink': 2, 'st_size': 108830059313, 'st_uid': 1001}
+        if full_path.endswith('.json'):
+            return {'st_atime': 1669403579.5569782, 'st_ctime': 1669403567.356995, 'st_gid': 1002, 'st_mode': 33188,
+                    'st_mtime': 1669403567.356995, 'st_nlink': 2, 'st_size': 108830059313, 'st_uid': 1001}
+        return a
 
     @log
     def readdir(self, path, fh):
