@@ -99,14 +99,26 @@ def list_dir_manipulated(token, client_id, client_secret, folder_id):
     return proceed_file
 
 
-def read_file_in_chunk(token, client_id, client_secret, file_id, offset, length):
+def get_child_id_hold_data(filename, offset, length):
+    print('ok')
+    child_dict = proceed_file[filename]
+    chunk_range_list = sorted([int(k) for k, _ in child_dict.items()])
+    current_index = 0
+    for number in chunk_range_list:
+        if offset < number:
+            return map_file_id[child_dict[str(number)]], offset - chunk_range_list[current_index - 1]
+        current_index += 1
+
+
+def read_file_in_chunk(token, client_id, client_secret, filename, offset, length):
     try:
         creds = Credentials.from_authorized_user_info(
             info={**json.loads(token), 'client_id': client_id, 'client_secret': client_secret}
         )
         service = build('drive', 'v3', credentials=creds)
+        file_id, real_offset = get_child_id_hold_data(filename, offset, length)
         request = service.files().get_media(fileId=file_id)
-        request.headers["Range"] = "bytes={}-{}".format(offset, offset + length)
+        request.headers["Range"] = "bytes={}-{}".format(real_offset, real_offset + length)
         if offset < 64 * 1024:
             # request.headers["Range"] = "bytes={}-{}".format(0, 64 * 1024 * 1024)
             request.headers["Range"] = ""
@@ -116,7 +128,7 @@ def read_file_in_chunk(token, client_id, client_secret, file_id, offset, length)
 
     except Exception as error:
         print(F'An error occurred: {error}')
-        return read_file_in_chunk(token, client_id, client_secret, file_id, offset, length)
+        return read_file_in_chunk(token, client_id, client_secret, filename, offset, length)
 
     return fh.getvalue()
 
@@ -125,9 +137,9 @@ if __name__ == '__main__':
     token = '{"access_token": "ya29.a0Aa4xrXMNAdNSTGuBeRV-OblCZHE8HNAEmmtlQ2beBGbbRFhm8PizfGFGnx-0PYQlrdmaVxlUQVDlKN0ANkvtfAUG3TMaEv31xyVMorOkuOQgftcYyRyIiHCdyDhI-3rKjvRUZGi6774WLZ2iidD8pUa2JPhRaCgYKATASARASFQEjDvL9mQNjn4Ut7avEd5MIdvyBfA0163", "token_type": "Bearer", "refresh_token": "1//04OjNYdknXPrTCgYIARAAGAQSNwF-L9IrGOKvOgbfTkeKMxWeY90BoxLJLxpJuW1CUWKmAJsqXQTuxZUCgXXy8mQbICiwQmvBwFI", "expiry": "2022-10-10T16:26:24.445819Z"}'
     client_id = '561906364179-jrl0tnvchd73c9tsvppfnjllursdff1t.apps.googleusercontent.com'
     client_secret = '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'
-    # # print(list_dir(token=token,
-    # #                folder_id='1T2erq7cVOOo3ZpZN6BeE0WBsrXlsVrwN', client_id=client_id,
-    # #                client_secret=client_secret))
+    print(list_dir_manipulated(token=token,
+                               folder_id='1T2erq7cVOOo3ZpZN6BeE0WBsrXlsVrwN', client_id=client_id,
+                               client_secret=client_secret))
     # # print('done')
     # list_dir_manipulated(token=token, client_id=client_id, client_secret=client_secret,
     #                      folder_id='1T2erq7cVOOo3ZpZN6BeE0WBsrXlsVrwN')
@@ -135,4 +147,5 @@ if __name__ == '__main__':
     # print(map_file_id)
     # print(read_file_in_chunk(token=token, client_id=client_id, client_secret=client_secret,
     #                          file_id='1iAmwI3sOHGWlZfdhQYqZ3_OOBdtzgPvq', offset=5, length=5))
-    print(read_file_in_chunk(token, client_id, client_secret, '1wERwDGU_cTlGUS6waw9HwbGG6xJDxRq-', 0, 16384))
+    print(read_file_in_chunk(token, client_id, client_secret, '89bf6bc0-f03c-4c3d-aea1-f4173c0bcbf7.json', 107495514112, 12288))
+    print('kaka')
