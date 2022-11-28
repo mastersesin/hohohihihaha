@@ -66,16 +66,17 @@ class Passthrough(Operations):
     @log
     def getattr(self, path, fh=None):
         full_path = self._full_path(path)
-        st = os.lstat(full_path)
-        a = dict((key, getattr(st, key)) for key in ('st_atime', 'st_ctime',
-                                                     'st_gid', 'st_mode', 'st_mtime', 'st_nlink', 'st_size',
-                                                     'st_uid'))
         # {'st_atime': 1669403579.5569782, 'st_ctime': 1669403567.356995, 'st_gid': 1002, 'st_mode': 16893,
         #            'st_mtime': 1669403567.356995, 'st_nlink': 2, 'st_size': 4096, 'st_uid': 1001}
         if full_path.endswith('.json'):
             return {'st_atime': 1669526320, 'st_ctime': 1669526098, 'st_gid': 1002, 'st_mode': 33188,
                     'st_mtime': 1669320754, 'st_nlink': 1, 'st_size': 108830059313, 'st_uid': 1001}
-        return a
+        else:
+            st = os.lstat(full_path)
+            a = dict((key, getattr(st, key)) for key in ('st_atime', 'st_ctime',
+                                                         'st_gid', 'st_mode', 'st_mtime', 'st_nlink', 'st_size',
+                                                         'st_uid'))
+            return a
 
     @log
     def readdir(self, path, fh):
