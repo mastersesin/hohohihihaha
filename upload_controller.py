@@ -11,7 +11,7 @@ from drive_client import upload
 MAX_FILE_SIZE = 3 * 1024 * 1024 * 1024
 MIN_FILE_SIZE = 2 * 1024 * 1024 * 1024
 MAX_THREAD = 5
-ENCRYPTED_TOTAL_BYTES = 1
+ENCRYPTED_TOTAL_BYTES = 64 * 1024 * 1024
 RANDOM_FILE_EXTENSION_LIST = ['pak', 'bak', 'arc', 'arj', 'bin', 'dump']
 EK = b'E-bxU5geNyrojsSg2mqn5Yv1_veAczf0xaffrFJBSjk='
 FERNET_OBJ = Fernet(EK)
