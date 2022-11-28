@@ -17,6 +17,10 @@ EK = b'E-bxU5geNyrojsSg2mqn5Yv1_veAczf0xaffrFJBSjk='
 FERNET_OBJ = Fernet(EK)
 
 
+def read_encrypted_file(bytes):
+    return FERNET_OBJ.decrypt(bytes)
+
+
 def read_in_chunks(file_obj):
     should_encrypted_byte = file_obj.read(ENCRYPTED_TOTAL_BYTES)
     yield FERNET_OBJ.encrypt(should_encrypted_byte), 0, ENCRYPTED_TOTAL_BYTES

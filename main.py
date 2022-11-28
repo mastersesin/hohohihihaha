@@ -8,6 +8,12 @@ import errno
 
 from fuse import FUSE, FuseOSError, Operations, fuse_get_context
 
+from drive_client import list_dir_manipulated
+
+token = '{"access_token": "ya29.a0Aa4xrXMNAdNSTGuBeRV-OblCZHE8HNAEmmtlQ2beBGbbRFhm8PizfGFGnx-0PYQlrdmaVxlUQVDlKN0ANkvtfAUG3TMaEv31xyVMorOkuOQgftcYyRyIiHCdyDhI-3rKjvRUZGi6774WLZ2iidD8pUa2JPhRaCgYKATASARASFQEjDvL9mQNjn4Ut7avEd5MIdvyBfA0163", "token_type": "Bearer", "refresh_token": "1//04OjNYdknXPrTCgYIARAAGAQSNwF-L9IrGOKvOgbfTkeKMxWeY90BoxLJLxpJuW1CUWKmAJsqXQTuxZUCgXXy8mQbICiwQmvBwFI", "expiry": "2022-10-10T16:26:24.445819Z"}'
+client_id = '561906364179-jrl0tnvchd73c9tsvppfnjllursdff1t.apps.googleusercontent.com'
+client_secret = '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'
+
 
 def log(func):
     def decorator_handler(*args, **kwargs):
@@ -73,8 +79,8 @@ class Passthrough(Operations):
         full_path = self._full_path(path)
 
         dirents = ['.', '..']
-        if os.path.isdir(full_path):
-            dirents.extend(os.listdir(full_path))
+        dirents.extend([k for k, v in list_dir_manipulated(token, client_id, client_secret,
+                                                           "1T2erq7cVOOo3ZpZN6BeE0WBsrXlsVrwN").items()])
         for r in dirents:
             yield r
 
