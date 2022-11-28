@@ -7,11 +7,17 @@ from googleapiclient.http import MediaIoBaseUpload
 
 
 def upload(file_in_mem, token, file_name, client_id, client_secret, drive_id_or_folder_id="0AGLae2SSKNqsUk9PVA"):
+    print(f'Uploading {file_name}')
     creds = Credentials.from_authorized_user_info(
         info={**json.loads(token), 'client_id': client_id, 'client_secret': client_secret}
     )
     service = build('drive', 'v3', credentials=creds)
-    media = MediaIoBaseUpload(io.BytesIO(file_in_mem), mimetype='application/octet-stream', resumable=True)
+    media = MediaIoBaseUpload(
+        io.BytesIO(file_in_mem),
+        mimetype='application/octet-stream',
+        resumable=True,
+        chunksize=512 * 1024 * 1024
+    )
     request = service.files().create(
         media_body=media,
         body={'name': file_name, 'parents': [drive_id_or_folder_id]},
