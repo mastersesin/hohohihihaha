@@ -8,8 +8,8 @@ from cryptography.fernet import Fernet
 
 from drive_client import upload
 
-MAX_FILE_SIZE = 3 * 1024 * 1024
-MIN_FILE_SIZE = 2 * 1024 * 1024
+MAX_FILE_SIZE = 3 * 1024 * 1024 * 1024
+MIN_FILE_SIZE = 2 * 1024 * 1024 * 1024
 MAX_THREAD = 5
 ENCRYPTED_TOTAL_BYTES = 1
 RANDOM_FILE_EXTENSION_LIST = ['pak', 'bak', 'arc', 'arj', 'bin', 'dump']
