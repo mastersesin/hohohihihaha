@@ -119,20 +119,19 @@ def read_file_in_chunk(token, client_id, client_secret, filename, offset, length
         file_id, start_byte, end_byte = get_child_id_hold_data(filename, offset, length)
         request = service.files().get_media(fileId=file_id)
         request.headers["Range"] = "bytes={}-{}".format(start_byte, end_byte)
-        print(file_id)
-        if offset < 64 * 1024:
-            # request.headers["Range"] = "bytes={}-{}".format(0, 64 * 1024 * 1024)
-            request.headers["Range"] = ""
-            fh = io.BytesIO(request.execute())
-            a = fh.getvalue()
-            print(len(a))
-            return FERNET_OBJ.decrypt(a)
+        # print(file_id)
+        # if offset < 64 * 1024:
+        #     # request.headers["Range"] = "bytes={}-{}".format(0, 64 * 1024 * 1024)
+        #     request.headers["Range"] = ""
+        #     fh = io.BytesIO(request.execute())
+        #     a = fh.getvalue()
+        #     print(len(a))
+        #     return FERNET_OBJ.decrypt(a)
         fh = io.BytesIO(request.execute())
 
     except Exception as error:
         print(F'An error occurred: {error}')
-        raise error
-        # return read_file_in_chunk(token, client_id, client_secret, filename, offset, length)
+        return read_file_in_chunk(token, client_id, client_secret, filename, offset, length)
 
     return fh.getvalue()
 
