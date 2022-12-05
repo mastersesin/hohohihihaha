@@ -123,7 +123,7 @@ def read_file_in_chunk(token, client_id, client_secret, filename, offset, length
             # request.headers["Range"] = "bytes={}-{}".format(0, 64 * 1024 * 1024)
             request.headers["Range"] = ""
             fh = io.BytesIO(request.execute())
-            return FERNET_OBJ.decrypt(fh.getvalue())[:length - 1 - offset]
+            return FERNET_OBJ.decrypt(fh.getvalue())
         fh = io.BytesIO(request.execute())
 
     except Exception as error:
