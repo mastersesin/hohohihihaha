@@ -105,9 +105,9 @@ def get_child_id_hold_data(filename, offset, length):
     for end_byte, file_name in child_dict.items():
         x = offset
         y = offset + length - 1
-        if current_start_byte <= x and y <= end_byte:
+        if current_start_byte <= x and y <= int(end_byte):
             return map_file_id[file_name], x - current_start_byte, y - current_start_byte
-        current_start_byte = end_byte + 1
+        current_start_byte = int(end_byte) + 1
 
 
 def read_file_in_chunk(token, client_id, client_secret, filename, offset, length):
