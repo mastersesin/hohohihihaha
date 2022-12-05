@@ -84,7 +84,7 @@ class Passthrough(Operations):
 
         dirents = ['.', '..']
         dirents.extend([k for k, v in list_dir_manipulated(token, client_id, client_secret,
-                                                           "1T2erq7cVOOo3ZpZN6BeE0WBsrXlsVrwN").items()])
+                                                           "0AGLae2SSKNqsUk9PVA").items()])
         for r in dirents:
             yield r
 
