@@ -23,18 +23,17 @@ def read_encrypted_file(bytes):
 
 def read_in_chunks(file_obj):
     should_encrypted_byte = file_obj.read(ENCRYPTED_TOTAL_BYTES)
-    yield FERNET_OBJ.encrypt(should_encrypted_byte), 0, ENCRYPTED_TOTAL_BYTES
-    start_byte = ENCRYPTED_TOTAL_BYTES
+    yield should_encrypted_byte, 0, ENCRYPTED_TOTAL_BYTES - 1
+    last_end_byte_index = ENCRYPTED_TOTAL_BYTES - 1
     while True:
-        current_start_byte = start_byte
         bytes_read = random.randint(MIN_FILE_SIZE, MAX_FILE_SIZE)
         data = file_obj.read(bytes_read)
-        end_byte = start_byte + bytes_read
-        next_start_byte = start_byte + bytes_read
-        start_byte = next_start_byte + 1
+        start_byte_index = last_end_byte_index + 1
+        end_byte_index = start_byte_index + len(data) - 1
+        last_end_byte_index = end_byte_index
         if not data:
             break
-        yield data, current_start_byte, end_byte
+        yield data, start_byte_index, end_byte_index
         del data
 
 

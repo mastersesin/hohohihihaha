@@ -100,14 +100,14 @@ def list_dir_manipulated(token, client_id, client_secret, folder_id):
 
 
 def get_child_id_hold_data(filename, offset, length):
-    print('ok')
     child_dict = proceed_file[filename]
-    chunk_range_list = sorted([int(k) for k, _ in child_dict.items()])
-    current_index = 0
-    for number in chunk_range_list:
-        if offset < number:
-            return map_file_id[child_dict[str(number)]], offset - chunk_range_list[current_index - 1]
-        current_index += 1
+    current_start_byte = 0
+    for end_byte, file_name in child_dict.items():
+        x = offset
+        y = offset + length - 1
+        if current_start_byte <= x and y <= end_byte:
+            return map_file_id[file_name], x - current_start_byte, y - current_start_byte
+        current_start_byte = end_byte + 1
 
 
 def read_file_in_chunk(token, client_id, client_secret, filename, offset, length):
@@ -116,9 +116,9 @@ def read_file_in_chunk(token, client_id, client_secret, filename, offset, length
             info={**json.loads(token), 'client_id': client_id, 'client_secret': client_secret}
         )
         service = build('drive', 'v3', credentials=creds)
-        file_id, real_offset = get_child_id_hold_data(filename, offset, length)
+        file_id, start_byte, end_byte = get_child_id_hold_data(filename, offset, length)
         request = service.files().get_media(fileId=file_id)
-        request.headers["Range"] = "bytes={}-{}".format(real_offset, real_offset + length - 1)
+        request.headers["Range"] = "bytes={}-{}".format(start_byte, end_byte)
         if offset < 64 * 1024:
             # request.headers["Range"] = "bytes={}-{}".format(0, 64 * 1024 * 1024)
             request.headers["Range"] = ""
@@ -147,5 +147,6 @@ if __name__ == '__main__':
     # print(map_file_id)
     # print(read_file_in_chunk(token=token, client_id=client_id, client_secret=client_secret,
     #                          file_id='1iAmwI3sOHGWlZfdhQYqZ3_OOBdtzgPvq', offset=5, length=5))
-    print(read_file_in_chunk(token, client_id, client_secret, '89bf6bc0-f03c-4c3d-aea1-f4173c0bcbf7.json', 107495514112, 12288))
+    print(read_file_in_chunk(token, client_id, client_secret, '89bf6bc0-f03c-4c3d-aea1-f4173c0bcbf7.json', 107495514112,
+                             12288))
     print('kaka')
