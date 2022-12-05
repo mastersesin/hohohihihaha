@@ -128,7 +128,8 @@ def read_file_in_chunk(token, client_id, client_secret, filename, offset, length
 
     except Exception as error:
         print(F'An error occurred: {error}')
-        return read_file_in_chunk(token, client_id, client_secret, filename, offset, length)
+        raise error
+        # return read_file_in_chunk(token, client_id, client_secret, filename, offset, length)
 
     return fh.getvalue()
 
