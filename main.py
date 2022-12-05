@@ -17,7 +17,7 @@ client_secret = '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'
 
 def log(func):
     def decorator_handler(*args, **kwargs):
-        print(func.__name__)
+        # print(func.__name__)
         return func(*args, **kwargs)
 
     return decorator_handler
@@ -42,7 +42,7 @@ class Passthrough(Operations):
         if partial.startswith("/"):
             partial = partial[1:]
         path = os.path.join(self.root, partial)
-        print(path)
+        # print(path)
         return path
 
     # Filesystem methods
@@ -158,7 +158,7 @@ class Passthrough(Operations):
     @log
     # plot-k32-2022-11-24-18-08-01588da0c4d62d03dab8f700daddbb7aed3e6868f0a567d02772c8856f26618a.plot
     def read(self, filename, length, offset, fh):
-        print(length, offset)
+        # print(length, offset)
         bytes_read = read_file_in_chunk(token, client_id, client_secret, filename.replace('/', ''), offset, length)
         return bytes_read
 

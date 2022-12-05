@@ -18,7 +18,7 @@ map_file_id = {}
 
 
 def upload(file_in_mem, token, file_name, client_id, client_secret, drive_id_or_folder_id=DEFAULT_DRIVE):
-    print(f'Uploading {file_name}')
+    # print(f'Uploading {file_name}')
     creds = Credentials.from_authorized_user_info(
         info={**json.loads(token), 'client_id': client_id, 'client_secret': client_secret}
     )
@@ -62,7 +62,7 @@ def list_dir(token, client_id, client_secret, folder_id, next_page_token=None):
             files.extend(list_dir(token, client_id, client_secret, folder_id, next_page_token))
 
     except Exception as error:
-        print(f'{error} - will retry')
+        # print(f'{error} - will retry')
         files.extend(list_dir(token, client_id, client_secret, folder_id, next_page_token))
 
     return files
@@ -119,18 +119,18 @@ def read_file_in_chunk(token, client_id, client_secret, filename, offset, length
         file_id, start_byte, end_byte = get_child_id_hold_data(filename, offset, length)
         request = service.files().get_media(fileId=file_id)
         request.headers["Range"] = "bytes={}-{}".format(start_byte, end_byte)
-        # print(file_id)
+#         # print(file_id)
         # if offset < 64 * 1024:
         #     # request.headers["Range"] = "bytes={}-{}".format(0, 64 * 1024 * 1024)
         #     request.headers["Range"] = ""
         #     fh = io.BytesIO(request.execute())
         #     a = fh.getvalue()
-        #     print(len(a))
+#         #     print(len(a))
         #     return FERNET_OBJ.decrypt(a)
         fh = io.BytesIO(request.execute())
 
     except Exception as error:
-        print(F'An error occurred: {error}')
+        # print(F'An error occurred: {error}')
         return read_file_in_chunk(token, client_id, client_secret, filename, offset, length)
 
     return fh.getvalue()
@@ -140,16 +140,16 @@ if __name__ == '__main__':
     token = '{"access_token": "ya29.a0Aa4xrXMNAdNSTGuBeRV-OblCZHE8HNAEmmtlQ2beBGbbRFhm8PizfGFGnx-0PYQlrdmaVxlUQVDlKN0ANkvtfAUG3TMaEv31xyVMorOkuOQgftcYyRyIiHCdyDhI-3rKjvRUZGi6774WLZ2iidD8pUa2JPhRaCgYKATASARASFQEjDvL9mQNjn4Ut7avEd5MIdvyBfA0163", "token_type": "Bearer", "refresh_token": "1//04OjNYdknXPrTCgYIARAAGAQSNwF-L9IrGOKvOgbfTkeKMxWeY90BoxLJLxpJuW1CUWKmAJsqXQTuxZUCgXXy8mQbICiwQmvBwFI", "expiry": "2022-10-10T16:26:24.445819Z"}'
     client_id = '561906364179-jrl0tnvchd73c9tsvppfnjllursdff1t.apps.googleusercontent.com'
     client_secret = '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'
-    print(list_dir_manipulated(token=token,
-                               folder_id='1T2erq7cVOOo3ZpZN6BeE0WBsrXlsVrwN', client_id=client_id,
-                               client_secret=client_secret))
-    # # print('done')
+    # print(list_dir_manipulated(token=token,
+    #                            folder_id='1T2erq7cVOOo3ZpZN6BeE0WBsrXlsVrwN', client_id=client_id,
+    #                            client_secret=client_secret))
+#     # # print('done')
     # list_dir_manipulated(token=token, client_id=client_id, client_secret=client_secret,
     #                      folder_id='1T2erq7cVOOo3ZpZN6BeE0WBsrXlsVrwN')
-    # print(proceed_file)
-    # print(map_file_id)
-    # print(read_file_in_chunk(token=token, client_id=client_id, client_secret=client_secret,
+#     # print(proceed_file)
+#     # print(map_file_id)
+#     # print(read_file_in_chunk(token=token, client_id=client_id, client_secret=client_secret,
     #                          file_id='1iAmwI3sOHGWlZfdhQYqZ3_OOBdtzgPvq', offset=5, length=5))
-    print(read_file_in_chunk(token, client_id, client_secret, '89bf6bc0-f03c-4c3d-aea1-f4173c0bcbf7.json', 107495514112,
-                             12288))
-    print('kaka')
+    # print(read_file_in_chunk(token, client_id, client_secret, '89bf6bc0-f03c-4c3d-aea1-f4173c0bcbf7.json', 107495514112,
+    #                          12288))
+    # print('kaka')
